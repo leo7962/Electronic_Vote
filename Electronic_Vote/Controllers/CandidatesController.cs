@@ -4,9 +4,7 @@ using Electronic_Vote.Dtos;
 using Electronic_Vote.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Electronic_Vote.Controllers
@@ -58,6 +56,14 @@ namespace Electronic_Vote.Controllers
             return new CreatedAtRouteResult("getCandidate", new { id = candidateDTO.id }, candidateDTO);
         }
 
-
+        [HttpPut("{id}")]
+        public async Task<ActionResult> Put(int id, [FromBody] CandidateCreateDto candidateCreateDto)
+        {
+            var entity = mapper.Map<Candidate>(candidateCreateDto);
+            entity.id = id;
+            context.Entry(entity).State = EntityState.Modified;
+            await context.SaveChangesAsync();
+            return NoContent();
+        }
     }
 }
